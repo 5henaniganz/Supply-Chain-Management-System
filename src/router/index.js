@@ -5,6 +5,8 @@ import Login from '../views/Login.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Settings from '../views/Settings.vue'
 import Bookkeeping from '../views/BookKeeping.vue'
+import Contract from '../views/Contracts.vue'
+import Invoices from '../views/Invoices.vue'
 
 const routes = [
   {
@@ -53,6 +55,22 @@ const routes = [
     component: Bookkeeping,
     meta: {
       title: 'Bookkeeping'
+    }
+  },
+  {
+    path: '/contract',
+    name: 'Contract',
+    component: Contract,
+    meta: {
+      title: 'Contract'
+    }
+  },
+  {
+    path: '/invoices',
+    name: 'Invoices',
+    component: Invoices,
+    meta: {
+      title: 'Invoices'
     }
   }
 ]

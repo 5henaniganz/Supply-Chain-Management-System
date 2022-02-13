@@ -32,7 +32,6 @@
       <table class="table-fixed w-72 lg:w-auto">
   <thead>
     <tr>
-      uphold
     <th class="w-2/6">Date</th>
       <th class="w-1/6">Supplier</th>
       <th class="w-1/6">Cost</th>

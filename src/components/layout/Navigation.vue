@@ -14,8 +14,8 @@
         <router-link v-if="isAuthenticated === false" class="text-shad  lg:rounded-sm lg:p-2 lg:pr-4 lg:pl-4" to="/">Home</router-link>
         <router-link v-if="isAuthenticated === false" class="text-shad  lg:rounded-sm lg:p-2 lg:pr-4 lg:pl-4" to="/cases">Use Cases</router-link>
         <router-link v-if="isAuthenticated === true" class="text-shad  lg:rounded-sm lg:p-2 lg:pr-4 lg:pl-4" to="/dashboard">Dashboard</router-link>
-        <router-link v-if="isAuthenticated === true" class="text-shad  lg:rounded-sm lg:p-2 lg:pr-4 lg:pl-4" to="/dashboard">Contracts</router-link>
-        <router-link v-if="isAuthenticated === true" class="text-shad  lg:rounded-sm lg:p-2 lg:pr-4 lg:pl-4" to="/dashboard">Invoices</router-link>
+        <router-link v-if="isAuthenticated === true" class="text-shad  lg:rounded-sm lg:p-2 lg:pr-4 lg:pl-4" to="/contract">Contracts</router-link>
+        <router-link v-if="isAuthenticated === true" class="text-shad  lg:rounded-sm lg:p-2 lg:pr-4 lg:pl-4" to="/invoices">Invoices</router-link>
         <router-link v-if="isAuthenticated === true" class="text-shad  lg:rounded-sm lg:p-2 lg:pr-4 lg:pl-4" to="/bookkeeping">Bookkeeping</router-link>
         <router-link v-if="isAuthenticated === true" class="text-shad  lg:rounded-sm lg:p-2 lg:pr-4 lg:pl-4" to="/settings">Account</router-link>
         <router-link to="/login">
@@ -49,10 +49,10 @@
           <router-link v-if="isAuthenticated === true" @click="openNav"  class="nav-text-transition" to="/dashboard">Dashboard</router-link>
         </li>
         <li>
-          <router-link v-if="isAuthenticated === true" @click="openNav"  class="nav-text-transition" to="/dashboard">Contracts</router-link>
+          <router-link v-if="isAuthenticated === true" @click="openNav"  class="nav-text-transition" to="/contract">Contracts</router-link>
         </li>
         <li>
-          <router-link v-if="isAuthenticated === true" @click="openNav"  class="nav-text-transition" to="/dashboard">Invoices</router-link>
+          <router-link v-if="isAuthenticated === true" @click="openNav"  class="nav-text-transition" to="/invoices">Invoices</router-link>
         </li>
         <li>
           <router-link v-if="isAuthenticated === true" @click="openNav"  class="nav-text-transition" to="/bookkeeping">Bookkeeping</router-link>
