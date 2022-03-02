@@ -6,7 +6,8 @@ const store = createStore({
       user: {},
       balance: {},
       profit: {},
-      transactions: {}
+      transactions: {},
+      accountNames: {}
     }
   },
   mutations: {
@@ -21,6 +22,9 @@ const store = createStore({
     },
     setTransactions (state, payload) {
       state.transactions = payload
+    },
+    setAccountNames (state, payload) {
+      state.accountNames = payload
     }
   }
 })

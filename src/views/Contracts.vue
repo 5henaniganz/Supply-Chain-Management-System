@@ -1,5 +1,7 @@
 <template>
+<div class="h-screen">
   <Contract />
+  </div>
 </template>
 
 <script>

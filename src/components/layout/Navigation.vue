@@ -1,21 +1,20 @@
 <template>
-    <div class="grid grid-cols-2 p-7 pb-5">
-      <div class="text-left text-black text-2xl font-medium">
-        <ul class="lg:ml-10">
-          <li>
+    <div class="grid grid-cols-2 p-7 pb-5 mr-10">
+      <div class="text-left text-black text-2xl font-medium ">
+        <div class="lg:ml-10">
+  
             <router-link v-if="isAuthenticated === false" to="/"><div class="pl-4 pr-4 pt-1 mr-3 rounded-full inline logo-col bg-orange-supl"></div> Supl.io</router-link>
             <router-link v-if="isAuthenticated === true" to="/dashboard"><div class="pl-4 pr-4 pt-1 mr-3 rounded-full inline logo-col bg-orange-supl"></div> Supl.io</router-link>
-          </li>
-        </ul>
+          
+        </div>
       </div>
 
       <!-- Main menu, becomes visible at breakpoint for large screens -->
-      <div class="hidden lg:block lg:text-right lg:text-white lg:mr-10 lg:space-x-10 lg:text-xl font-medium">
+      <div class="hidden lg:block lg:text-right lg:text-white lg:space-x-10 lg:text-xl font-medium">
         <router-link v-if="isAuthenticated === false" class="text-shad  lg:rounded-sm lg:p-2 lg:pr-4 lg:pl-4" to="/">Home</router-link>
         <router-link v-if="isAuthenticated === false" class="text-shad  lg:rounded-sm lg:p-2 lg:pr-4 lg:pl-4" to="/cases">Use Cases</router-link>
         <router-link v-if="isAuthenticated === true" class="text-shad  lg:rounded-sm lg:p-2 lg:pr-4 lg:pl-4" to="/dashboard">Dashboard</router-link>
         <router-link v-if="isAuthenticated === true" class="text-shad  lg:rounded-sm lg:p-2 lg:pr-4 lg:pl-4" to="/contract">Contracts</router-link>
-        <router-link v-if="isAuthenticated === true" class="text-shad  lg:rounded-sm lg:p-2 lg:pr-4 lg:pl-4" to="/invoices">Invoices</router-link>
         <router-link v-if="isAuthenticated === true" class="text-shad  lg:rounded-sm lg:p-2 lg:pr-4 lg:pl-4" to="/bookkeeping">Bookkeeping</router-link>
         <router-link v-if="isAuthenticated === true" class="text-shad  lg:rounded-sm lg:p-2 lg:pr-4 lg:pl-4" to="/settings">Account</router-link>
         <router-link to="/login">
@@ -50,9 +49,6 @@
         </li>
         <li>
           <router-link v-if="isAuthenticated === true" @click="openNav"  class="nav-text-transition" to="/contract">Contracts</router-link>
-        </li>
-        <li>
-          <router-link v-if="isAuthenticated === true" @click="openNav"  class="nav-text-transition" to="/invoices">Invoices</router-link>
         </li>
         <li>
           <router-link v-if="isAuthenticated === true" @click="openNav"  class="nav-text-transition" to="/bookkeeping">Bookkeeping</router-link>

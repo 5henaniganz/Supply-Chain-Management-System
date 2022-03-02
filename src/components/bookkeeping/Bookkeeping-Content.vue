@@ -1,5 +1,6 @@
 <template>
 <div class="h-screen">
+  <div id="iframeContainer"></div>
 <div class="flex justify-center text-center flex-col items-center break-words">
 
   <div class="flex justify-center items-center flex-col text-sm lg:text-normal">
@@ -8,20 +9,22 @@
       <table class="table-fixed w-80 lg:w-auto">
   <thead >
     <tr>
-    <th class="w-2/6">Date</th>
-      <th class="w-1/6">Supplier</th>
-      <th class="w-1/6">Cost</th>
-      <th class="w-1/6">Description</th>
-      <th class="w-1/6">Blockchain Explorer</th>
+    <th class="w-2/7">Date</th>
+      <th class="w-1/7">Supplier</th>
+      <th class="w-1/7">Cost</th>
+      <th class="w-1/7">Description</th>
+      <th class="w-1/7">Blockchain Explorer</th>
+      <th class="w-1/7">Invoice</th>
     </tr>
   </thead>
   <tbody>
-    <tr v-for="payable in accountsObject.payable" :key="payable">
-      <td>{{payable.block_timestamp.substring(0,10).split("-").reverse().join("-")}}</td>
-      <td>{{payable.from_address}}</td>
+    <tr v-for="(payable, index) in accountsObject.payable" :key="index">
+      <td>{{payable.block_timestamp.substring(0,10).split("-").reverse().join("/")}}</td>
+      <td>{{test[index]}}</td>
       <td>-{{payable.value/1000000000000000000}} Eth</td>
       <td>Placeholder Description</td>
       <td><a :href="'https://ropsten.etherscan.io/tx/' + payable.hash">View</a></td>
+      <td><button @click="downloadPdf(payable.from_address, payable.value/1000000000000000000, payable.block_timestamp.substring(0,10).split('-').reverse().join('/'), payable.to_address, test[index])">View</button></td>
     </tr>
   </tbody>
 </table>
@@ -71,6 +74,7 @@ setup (){
     const $moralis = inject('$moralis')
     const user = $moralis.User.current()
     const currentEthAddress = user.get("ethAddress");
+    let test = []
 
 for(let i = 0; i < fullTransactionList.length; ++i){
     if(fullTransactionList[i].from_address === currentEthAddress){
@@ -79,6 +83,15 @@ for(let i = 0; i < fullTransactionList.length; ++i){
         accountsObject.recieve.push(fullTransactionList[i]) 
     }
 }
+
+        for(let i = 0; i < accountsObject.payable.length; i++){ 
+    for(let x = 0; x < store.state.accountNames.length; x ++){
+      if(accountsObject.payable[i].to_address === store.state.accountNames[x].ethAddress){
+        test.push(store.state.accountNames[x].username)
+      }
+    }
+  }
+console.log(test)
 
 function convertToCSV () {
 let today = new Date();
@@ -106,8 +119,66 @@ const csv = [
         downloadLink.click();
         document.body.removeChild(downloadLink);
 }
+require('pdfmake/build/pdfmake.js');
+require('pdfmake/build/vfs_fonts.js');
+ function downloadPdf (wallet, cost, date, walletTo, companyTo){
+var dd = {
+      pageSize: {
+    width: 595.28,
+    height: 'auto'
+  },
+	content: [
+		{text: 'Invoice', style: 'header'},
+    {text: 'Date: ' + date, style: 'subheader'},
+		{text: 'From:                                                                 To: ', style: 'subheader'},
+		{text: 'Company: ' + $moralis.User.current().attributes.username + '                                                                                                   Company: ' + companyTo, style: 'invoiceTextSize'},
+		{text: 'Wallet:    '+ wallet +'                                           Wallet: ' + walletTo, style: 'invoiceFrom'},
+		
+		{
+			style: '',
+			table: {
+			    widths: [200, '*', '*', '*'],
+				body: [
+					[ { text: 'Service', style: 'tableStyle' }, { text: 'Quantity', style: 'tableStyle'}, { text: 'Cost', style: 'tableStyle' }, { text: 'Gross Total', style: 'tableStyle'}],
+					['Pallets', 'X2', cost/2 + "Eth", cost + "Eth"]
+				], 
+			}
+		},
+		{text: 'Net Total: ' + cost + " Eth", style: 'header'},
+	],
+	styles: {
+		header: {
+			fontSize: 25,
+			bold: true,
+			margin: [0, 30, 0, 10]
+		},
+		subheader: {
+			fontSize: 16,
+			bold: true,
+			margin: [0, 10, 0, 5]
+		},
+		tableStyle: {
+		    bold: true,
+		    fillColor: '#ffd2c0'
+		},
+		invoiceFrom: {
+      fontSize: 8,
+		  margin: [0, 0, 0, 20],
+		},
+    invoiceTextSize: {
+      fontSize: 8
+    }
+	},
+	defaultStyle: {
+		// alignment: 'justify'
+	}
+	
+}
+    pdfMake.createPdf(dd).open();
+  }
 
-return {accountsObject, convertToCSV}
+
+return {accountsObject, convertToCSV, downloadPdf, test}
 }
 }
 </script>
