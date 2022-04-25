@@ -7,7 +7,7 @@
       <div class="bg-white shadow-2xl rounded-lg p-5 pb-7 w-96">
       <div><h1 class="mt-2 text-2xl font-normal text-black text-center">Create Recurring Contract</h1></div>
 <div class="flex flex-col items-center">
-    <h1 class="" id="status">{{test}}</h1>
+    <h1 class="" id="status">{{statusCon}}</h1>
   <label class="block mb-1 mt-4" for="org-name">Payee</label>
   <input class=" w-4/5  h-8 px-3 text-base placeholder-gray-600 placeholder-opacity-40 border rounded-lg focus:shadow-outline" type="text" placeholder="enter payee name" v-model="client" id="org-name"/>
 
@@ -58,6 +58,7 @@ import axios from 'axios'
 export default {
 data(){
     return{
+        statusCon: '',
         test: '',
         ethAmount: '',
         walletAddress: '',
@@ -89,6 +90,7 @@ this.term = termValue
 
     },
     contractCreation: async function(){
+        try {
         axios.post('http://localhost:3000/create', 
         {
             "client": this.client,
@@ -96,8 +98,12 @@ this.term = termValue
             "date": "26/02/2022",
             "amount": this.ethAmount,
             "owner": await moralis.User.current().get("ethAddress")
+        }).then((res) => {
+            this.statusCon = res.data.message
         })
-        console.log("contract Created")
+        } catch (error) {
+            this.statusCon = "Contract Creation Failed"
+        }
     }
 }
 }

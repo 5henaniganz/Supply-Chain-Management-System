@@ -4,7 +4,7 @@
     <h1 class="mt-2 text-2xl font-normal text-black opacity-100">Login</h1>
 </div>
 
-  <div @click="login" class="flex bg-baby-blue hover:bg-opacity-50 cursor-pointer text-black text-2xl pl-5 pr-5 pt-1 pb-1 rounded-md w-48">
+  <div @click="login" id="meta" class="flex bg-baby-blue hover:bg-opacity-50 cursor-pointer text-black text-2xl pl-5 pr-5 pt-1 pb-1 rounded-md w-48">
     <img src="../../assets/metamask-fox.svg" alt="metamask-fox" class="w-9 h-10"><h1 class="mt-1 ml-1">MetaMask</h1>
     </div>
 
