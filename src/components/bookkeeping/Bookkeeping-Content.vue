@@ -4,32 +4,33 @@
 <div class="flex justify-center text-center flex-col items-center break-words">
 
   <div class="flex justify-center items-center flex-col text-sm lg:text-normal">
-   <div class="bg-white shadow-2xl rounded-2xl p-10 w-96 lg:w-auto">   
-      <h1 class="text-center mb-5 text-xl">Accounts Payable</h1>
-      <table class="table-fixed w-80 lg:w-auto">
+<div class="bg-white shadow-2xl rounded-2xl p-10 mt-4 break-words w-96 lg:w-auto">
+      <h1 class="text-center mb-5 text-xl">Accounts Recievable</h1>
+      <table class="table-fixed w-72 lg:w-auto">
   <thead >
     <tr>
-    <th class="w-2/7">Date</th>
-      <th class="w-1/7">Supplier</th>
-      <th class="w-1/7">Cost</th>
-      <th class="w-1/7">Description</th>
-      <th class="w-1/7">Blockchain Explorer</th>
-      <th class="w-1/7">Invoice</th>
+    <th class="w-2/6">Date</th>
+      <th class="w-1/6">Supplier</th>
+      <th class="w-1/6">Cost</th>
+      <th class="w-1/6">Blockchain Explorer</th>
+      <th class="w-1/6">Invoice</th>
     </tr>
   </thead>
   <tbody>
-    <tr v-for="(payable, index) in accountsObject.payable" :key="index">
+    <tr v-for="(payable, index) in visibleLogs" :key="index">
       <td>{{payable.block_timestamp.substring(0,10).split("-").reverse().join("/")}}</td>
-      <td>{{test[index]}}</td>
+      <td>{{visibleNames[index]}}</td>
       <td>-{{payable.value/1000000000000000000}} Eth</td>
-      <td>Placeholder Description</td>
-      <td><a :href="'https://ropsten.etherscan.io/tx/' + payable.hash">View</a></td>
+      <td><a :href="'https://ropsten.etherscan.io/tx/' + payable.hash" target="_blank">View</a></td>
       <td><button @click="downloadPdf(payable.from_address, payable.value/1000000000000000000, payable.block_timestamp.substring(0,10).split('-').reverse().join('/'), payable.to_address, test[index])">View</button></td>
     </tr>
   </tbody>
 </table>
+<div class=" flex justify-center mt-2 gap-2">
+      <button @click="updatePage(currentPage-1)">Prev</button>
+      <button @click="updatePage(currentPage+1)">Next</button>
 </div>
-
+</div>
 <div class="bg-white shadow-2xl rounded-2xl p-10 mt-4 break-words w-96 lg:w-auto">
       <h1 class="text-center mb-5 text-xl">Accounts Recievable</h1>
       <table class="table-fixed w-72 lg:w-auto">
@@ -38,20 +39,22 @@
     <th class="w-2/6">Date</th>
       <th class="w-1/6">Supplier</th>
       <th class="w-1/6">Cost</th>
-      <th class="w-1/6">Description</th>
       <th class="w-1/6">Blockchain Explorer</th>
     </tr>
   </thead>
   <tbody>
-    <tr v-for="recieve in accountsObject.recieve" :key="recieve">
-      <td>{{recieve.block_timestamp.substring(0,10).split("-").reverse().join("-")}}</td>
-      <td>{{recieve.from_address}}</td>
+    <tr v-for="(recieve, index) in visibleLogsT" :key="index">
+      <td>{{recieve.block_timestamp.substring(0,10).split("-").reverse().join("/")}}</td>
+      <td>{{visibleNamesT[index]}}</td>
       <td>+{{recieve.value/1000000000000000000}} Eth</td>
-      <td>Placeholder Description</td>
       <td><a :href="'https://ropsten.etherscan.io/tx/' + recieve.hash">View</a></td>
     </tr>
   </tbody>
 </table>
+<div class=" flex justify-center mt-2 gap-2">
+      <button @click="updatePageT(currentPageT-1)">Prev</button>
+      <button @click="updatePageT(currentPageT+1)">Next</button>
+</div>
 </div>
 <div @click="convertToCSV" class="flex mt-3 bg-white p-1 border rounded-lg shadow-2xl place-self-end hover:bg-gray-100 cursor-pointer">
     <h1 class="text-lg mr-1">Download CSV</h1>
@@ -64,9 +67,13 @@
 </template>
 
 <script>
-import {inject} from 'vue'
+import {inject, ref} from 'vue'
 import { useStore } from 'vuex'
+import Pagination from '../helpers/pagination.vue'
 export default {
+  components:{
+    Pagination
+  },
 setup (){
     const store = useStore()
     let fullTransactionList = store.state.transactions;
@@ -75,6 +82,21 @@ setup (){
     const user = $moralis.User.current()
     const currentEthAddress = user.get("ethAddress");
     let test = []
+    let testPay = []
+    const contractAddress = '0xcefb33651ce065fe69801d887db068c590c131d3';
+
+    let currentPage = ref(0)
+    let totalPages = ref(0)
+    let pageSize = ref(5)
+    let visibleLogs = ref([])
+    let visibleNames = ref([])
+    
+    let currentPageT = ref(0)
+    let totalPagesT = ref(0)
+    let pageSizeT = ref(5)
+    let visibleLogsT = ref([])
+    let visibleNamesT = ref([])
+
 
 for(let i = 0; i < fullTransactionList.length; ++i){
     if(fullTransactionList[i].from_address === currentEthAddress){
@@ -88,11 +110,57 @@ for(let i = 0; i < fullTransactionList.length; ++i){
     for(let x = 0; x < store.state.accountNames.length; x ++){
       if(accountsObject.payable[i].to_address === store.state.accountNames[x].ethAddress){
         test.push(store.state.accountNames[x].username)
+      }else if(accountsObject.payable[i].to_address === contractAddress){
+        test.push('Contract Created')
       }
     }
   }
-console.log(test)
 
+  function updatePage(pageNo){
+    if(pageNo <= 0){
+      pageNo = 0
+    }
+    currentPage.value = pageNo
+    updateLogs()
+  }
+
+  function updateLogs(){
+    visibleLogs.value = accountsObject.payable.slice(currentPage.value*pageSize.value, currentPage.value*pageSize.value + pageSize.value)
+    visibleNames.value = test.slice(currentPage.value*pageSize.value, currentPage.value*pageSize.value + pageSize.value)
+    if(visibleLogs.value.length == 0 && currentPage.value > 0){
+      updatePage(currentPage.value - 1)
+    }
+  }
+
+          for(let i = 0; i < accountsObject.recieve.length; i++){ 
+    for(let x = 0; x < store.state.accountNames.length; x ++){
+      if(accountsObject.recieve[i].from_address === store.state.accountNames[x].ethAddress){
+        testPay.push(store.state.accountNames[x].username)
+      }else if(accountsObject.recieve[i].from_address === contractAddress){
+        testPay.push('Contract Created')
+      }
+    }
+  }
+
+
+
+  function updatePageT(pageNo){
+    if(pageNo <= 0){
+      pageNo = 0
+    }
+    currentPageT.value = pageNo
+    updateLogsT()
+  }
+
+  function updateLogsT(){
+    visibleLogsT.value = accountsObject.recieve.slice(currentPageT.value*pageSizeT.value, currentPageT.value*pageSizeT.value + pageSizeT.value)
+    visibleNamesT.value = testPay.slice(currentPageT.value*pageSizeT.value, currentPageT.value*pageSizeT.value + pageSizeT.value)
+    if(visibleLogsT.value.length == 0 && currentPageT.value > 0){
+      updatePageT(currentPageT.value -1)
+    }
+  }
+
+updateLogsT()
 function convertToCSV () {
 let today = new Date();
 let dd = String(today.getDate()).padStart(2, '0');
@@ -176,9 +244,8 @@ var dd = {
 }
     pdfMake.createPdf(dd).open();
   }
-
-
-return {accountsObject, convertToCSV, downloadPdf, test}
+updateLogs()
+return {currentPageT, totalPagesT, pageSizeT, visibleLogsT, updatePageT, updateLogsT, visibleNamesT, accountsObject, convertToCSV, downloadPdf, test, testPay, currentPage, totalPages, pageSize, visibleLogs, updatePage, updateLogs,visibleNames}
 }
 }
 </script>

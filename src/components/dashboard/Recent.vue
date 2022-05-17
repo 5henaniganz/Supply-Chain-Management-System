@@ -62,6 +62,7 @@ export default {
 setup (){
   const store = useStore()
 const $moralis = inject('$moralis')
+
 var transactionList = async () => {
 const $moralis = inject('$moralis')
 const user = await $moralis.User.current()
@@ -72,6 +73,7 @@ return transactions
 
     const setTransactions = (payload) => store.commit('setTransactions', payload)
     transactionList().then(value => {setTransactions(value.result)})
+    
 var transactionsOne = computed(() => {
     var loading = true;
     var test = [];
@@ -87,8 +89,6 @@ var transactionsOne = computed(() => {
     return [store.state.transactions, loading, test]
 }else{ return ['', loading]}})
 
-
-console.log(transactionsOne.value)
 return {transactionsOne}
 }
 }

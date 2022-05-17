@@ -7,11 +7,10 @@
 <table v-if="data" class="table-fixed text-center">
   <thead>
     <tr class="text-center items-center">
-      <th class="w-2/6">Company</th>
+      <th class="w-1/6">Company</th>
       <th class="w-1/6">Cost</th>
       <th class="w-1/6">Payment Date</th>
       <th class="w-1/6">Liquidity</th>
-      <th class="w-1/6">Cancel Contract</th>
     </tr>
   </thead>
   <tbody>
@@ -21,10 +20,6 @@
       <td>{{upcoming.date}}</td>
       <td v-if="upcoming.amount <= bing" class="bg-green-100">Able to Honor</td>
       <td v-else class="bg-red-300 animate-pulse">Unable to Honor</td>
-      <td class="flex flex-col items-center"><div>
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-</svg></div></td>
     </tr>
   </tbody>
 </table>
@@ -43,7 +38,7 @@ import moralis from 'moralis'
 export default {
 data(){
   return{
-    data: '',
+    data: [],
     bing: 1
   }
 },
@@ -53,12 +48,16 @@ async mounted(){
 await moralis.Web3API.account.getNativeBalance(options).then(async (res) => {
   this.bing = await res.balance/1000000000000000000
 });
-      await  axios.post('http://localhost:3000/active', 
+      await  axios.post('https://student-supply.herokuapp.com/getAll', 
 {
-    "wallet": user
+    "wallet": user,
+    "walletTwo": user
 }).then(async (res) =>{
   this.data = await res.data
 })
+},
+methods: {
+
 }
 }
 </script>

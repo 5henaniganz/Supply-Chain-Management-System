@@ -7,12 +7,6 @@
   <div @click="login" id="meta" class="flex bg-baby-blue hover:bg-opacity-50 cursor-pointer text-black text-2xl pl-5 pr-5 pt-1 pb-1 rounded-md w-48">
     <img src="../../assets/metamask-fox.svg" alt="metamask-fox" class="w-9 h-10"><h1 class="mt-1 ml-1">MetaMask</h1>
     </div>
-
-  <div><h1 class="text-2xl text-center">or</h1></div>
-
-    <div class="flex bg-baby-blue hover:bg-opacity-50 cursor-pointer text-black text-2xl pl-5 pr-5 pt-1 pb-1 rounded-md w-52">
-    <img src="../../assets/walletconnect.svg" alt="wallet-connect" class="w-9 h-10"><h1 class="mt-1 ml-1">Wallet Con</h1>
-    </div>
 </div>
 
 <div v-if="isAuthenticated === true" class="flex flex-col w-72 justify-center items-center gap-y-2 bg-white pb-5 rounded-lg shadow-2xl">
