@@ -3,8 +3,8 @@
       <div class="text-left text-black text-2xl font-medium ">
         <div class="lg:ml-10">
   
-            <router-link v-if="isAuthenticated === false" to="/"><div class="pl-4 pr-4 pt-1 mr-3 rounded-full inline logo-col bg-orange-supl"></div> Supllio</router-link>
-            <router-link v-if="isAuthenticated === true" to="/dashboard"><div class="pl-4 pr-4 pt-1 mr-3 rounded-full inline logo-col bg-orange-supl"></div> Supllio</router-link>
+            <router-link v-if="isAuthenticated === false" to="/"><div class="pl-4 pr-4 pt-1 mr-3 rounded-full inline logo-col bg-orange-supl"></div> Supl.io</router-link>
+            <router-link v-if="isAuthenticated === true" to="/dashboard"><div class="pl-4 pr-4 pt-1 mr-3 rounded-full inline logo-col bg-orange-supl"></div> Supl.io</router-link>
           
         </div>
       </div>

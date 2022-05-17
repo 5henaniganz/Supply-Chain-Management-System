@@ -69,7 +69,7 @@ async mounted(){
 await moralis.Web3API.account.getNativeBalance(options).then(async (res) => {
   this.bing = await res.balance/1000000000000000000
 });
-      await  axios.post('https://student-supply.herokuapp.com/supply', 
+      await  axios.post('http://localhost:3000/supply', 
 {
     "wallet": user
 }).then(async (res) =>{
@@ -245,7 +245,7 @@ methods: {
     this.loading = true;
     await withdrawContract.wait()
     this.loading = false;
-    await axios.post('https://student-supply.herokuapp.com/delete', {
+    await axios.post('http://localhost:3000/delete', {
         "wallet": contractAddress,
         "client": contractClient
     }).then(() => {

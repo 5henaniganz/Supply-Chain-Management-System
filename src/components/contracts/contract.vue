@@ -320,7 +320,7 @@ try{
     const depositValue = await moralis.executeFunction(deposit)
     this.loading = false
     this.contractStatus = 'Contract Created'
-    await axios.post('https://student-supply.herokuapp.com/create', {
+    await axios.post('http://localhost:3000/create', {
         "client": this.contractClient,
         "wallet": this.contractAddress,
         "date": realDate.substring(5, 7) + "/" + realDate.substring(8, 11)+"/"+realDate.substring(14, 16),
@@ -357,7 +357,7 @@ this.term = termValue
     },
     contractCreation: async function(){
         try {
-        axios.post('https://student-supply.herokuapp.com/create', 
+        axios.post('http://localhost:3000/create', 
         {
             "client": this.client,
             "wallet": this.walletAddress,
